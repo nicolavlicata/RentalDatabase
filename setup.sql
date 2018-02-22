@@ -4,11 +4,15 @@ CREATE TABLE Movie (
 	id int, 
 	name varchar(200), 
 	year int,
-	is_rented boolean,
 	PRIMARY KEY(id)
 );
 -- file path will vary depending on system
 \copy movie from 'C:/Users/jblan/Desktop/imdb-cs3200/movie.txt' with delimiter '|' null as ''
+
+-- does not allow you to import the data with "is_rented" as a column
+
+ALTER TABLE movie
+ADD COLUMN "is_rented" BOOLEAN DEFAULT FALSE;
 
 CREATE TABLE Rental_Plan (
 	plan_name varchar,
@@ -17,7 +21,9 @@ CREATE TABLE Rental_Plan (
 	PRIMARY KEY (plan_name)
 );
 
-CREATE TABLE User (
+-- table name "user" invalid
+
+CREATE TABLE Customer (
 	username varchar,
 	password varchar,
 	address varchar,
@@ -34,11 +40,19 @@ CREATE TABLE Rental (
 	date_out date,
 	date_in date,
 	FOREIGN KEY (movieid) REFERENCES Movie(id),
-	FOREIGN KEY (username) REFERENCES User(username)
+	FOREIGN KEY (username) REFERENCES Customer(username)
 );
 
-INSERT INTO User VALUES ('jack blanc', 'password', '885 Rubis Dr', 'Sunnyvale', 'USA', 'Basic');
+INSERT INTO Custmer VALUES ('Jack Blanc', 'password', '885 Rubis Dr', 'Sunnyvale', 'USA', 'Basic');
 -- Plans will be one of 'Basic' or 'Premium'
 INSERT INTO Rental_Plan VALUES ('Basic', 10, 1);
+INSERT INTO Rental_Plan VALUES ('Premium', 15, 2);
 INSERT INTO Rental VALUES ('100', 'jack blanc', '02-10-2018', '02-20-2018');
 -- movie is populated already
+
+
+
+
+
+
+
