@@ -1,3 +1,2 @@
 # RentalDatabase
-Project for Database Design
-Northeastern University
+Project for Database Design at Northeastern University.
