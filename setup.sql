@@ -43,13 +43,25 @@ CREATE TABLE Rental (
 	FOREIGN KEY (username) REFERENCES Customer(username)
 );
 
-INSERT INTO Custmer VALUES ('Jack Blanc', 'password', '885 Rubis Dr', 'Sunnyvale', 'USA', 'Basic');
--- Plans will be one of 'Basic' or 'Premium'
+
 INSERT INTO Rental_Plan VALUES ('Basic', 10, 1);
 INSERT INTO Rental_Plan VALUES ('Premium', 15, 2);
-INSERT INTO Rental VALUES ('100', 'jack blanc', '02-10-2018', '02-20-2018');
--- movie is populated already
+INSERT INTO Rental_Plan VALUES ('Employee', 0, 9999);
 
+INSERT INTO Customer VALUES ('jb1', 'password', 'Jack', 'Blanc', '885 Rubis Dr', 'Sunnyvale', 'USA', 'Basic');
+INSERT INTO Customer VALUES ('dpc', 'blueberrys', 'Dylan', 'Collins', '111 Fake St', 'Boston', 'USA', 'Premium');
+INSERT INTO Customer VALUES ('phillerj', 'best_password', 'Phil', 'Jackson', '1 Some Rd', 'Seattle', 'USA', 'Basic');
+INSERT INTO Customer VALUES ('mWhite', 'test', 'Mary', 'White', '42 Real Dr', 'San Diego', 'USA', 'Premium');
+INSERT INTO Customer VALUES ('oldschoolethel', 'secure', 'Ethel', 'Palmer', '7 Best Av', 'Ontario', 'Canada', 'Basic');
+INSERT INTO Customer VALUES ('leung.an', 'benlerner', 'Andrew', 'Leung', '1 Street Lane Circle Dr', 'Eastford', 'USA', 'Basic');
+
+INSERT INTO Rental VALUES (100, 'jb1', '02-10-2018', '02-20-2018');
+INSERT INTO Rental VALUES (101, 'jbl', '02-10-2018', NULL);
+INSERT INTO Rental VALUES (123, 'dpc', '02-20-2018', '02-20-2018');
+INSERT INTO Rental VALUES (123, 'dpc', '02-20-2018', '02-22-2018');
+INSERT INTO Rental VALUES (124, 'dpc', '10-10-2017', '11-1-2017');
+INSERT INTO Rental VALUES (101, 'phillerj', '02-09-2018', '02-09-2018');
+INSERT INTO Rental VALUES (124, 'phillerj', '02-01-2018', NULL);
 
 
 
