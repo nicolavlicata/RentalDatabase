@@ -54,7 +54,7 @@ INSERT INTO Customer VALUES ('mWhite', 'test', 'Mary', 'White', '42 Real Dr', 'S
 INSERT INTO Customer VALUES ('oldschoolethel', 'secure', 'Ethel', 'Palmer', '7 Best Av', 'Ontario', 'Canada', 'Basic');
 INSERT INTO Customer VALUES ('leung.an', 'benlerner', 'Andrew', 'Leung', '1 Street Lane Circle Dr', 'Eastford', 'USA', 'Basic');
 
-INSERT INTO Rental VALUES ('100', 'jb1', '02-10-2018', '02-20-2018');
+INSERT INTO Rental VALUES (200, 'jb1', '02-10-2018', '02-20-2018');
 INSERT INTO Rental VALUES (100, 'jb1', '02-10-2018', '02-20-2018');
 INSERT INTO Rental VALUES (101, 'jbl', '02-10-2018', NULL);
 INSERT INTO Rental VALUES (123, 'dpc', '02-20-2018', '02-20-2018');
