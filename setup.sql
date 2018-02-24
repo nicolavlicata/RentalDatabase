@@ -9,8 +9,6 @@ CREATE TABLE Movie (
 -- file path will vary depending on system
 \copy movie from 'C:/Users/jblan/Desktop/imdb-cs3200/movie.txt' with delimiter '|' null as ''
 
--- does not allow you to import the data with "is_rented" as a column
-
 ALTER TABLE movie
 ADD COLUMN "is_rented" BOOLEAN DEFAULT FALSE;
 
@@ -56,7 +54,7 @@ INSERT INTO Customer VALUES ('leung.an', 'benlerner', 'Andrew', 'Leung', '1 Stre
 
 INSERT INTO Rental VALUES (200, 'jb1', '02-10-2018', '02-20-2018');
 INSERT INTO Rental VALUES (100, 'jb1', '02-10-2018', '02-20-2018');
-INSERT INTO Rental VALUES (101, 'jbl', '02-10-2018', NULL);
+INSERT INTO Rental VALUES (101, 'jb1', '02-10-2018', NULL);
 INSERT INTO Rental VALUES (123, 'dpc', '02-20-2018', '02-20-2018');
 INSERT INTO Rental VALUES (123, 'dpc', '02-20-2018', '02-22-2018');
 INSERT INTO Rental VALUES (124, 'dpc', '10-10-2017', '11-1-2017');
