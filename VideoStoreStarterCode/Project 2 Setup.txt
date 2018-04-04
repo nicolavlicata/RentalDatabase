@@ -1,0 +1,81 @@
+-- change below paths to the location of your VideoStoreStarterCode and Java jdk bin folder
+
+cd C:\Users\Andrew Leung\Documents\2017-2018\Spring\Database Design\VideoStoreStarterCode
+path C:\Program Files\Java\jdk1.8.0_151\bin;%path%
+set CLASSPATH=.;postgresql-9.2-1002.jdbc4.jar
+javac -g VideoStore.java Query.java
+java VideoStore leung.an nuid
+
+-- these tables are all placed in a single database called 'rental_service'
+-- the project specifies to have an IMDB and CUSTOMER database, but I wasn't sure how to reference databases since the CUSTOMER database needs to reference the movie table
+-- therefore, I just changed both database references in the configuration file to 'rental_service'
+
+-- I wasn't quite able to get the fastsearch working, but have the three queries outlined. they just need to be merged at this point. 
+-- other than than that, the remaining work is to do the transactions i.e. change plan, return movie, check out movie, etc. keeping in mind the constraints to doing those:
+-- a movie can only be rented by a single customer
+-- a customer cannot rent more movies than allowed by their plan
+-- when switching plans, it needs to be ensured that the current amount of rentals the customer has is valid under the new plan
+-- etc.
+
+CREATE TABLE Rental_Plan (
+	plan_name VARCHAR(100),
+	monthly_fee money NOT NULL,
+	max_rentals int NOT NULL, CHECK (max_rentals > 0),
+	PRIMARY KEY (plan_name)
+);
+
+CREATE TABLE Customer (
+	id int,
+	username VARCHAR(100),
+	password VARCHAR(200),
+	fname VARCHAR(100) NOT NULL,
+	lname VARCHAR(100) NOT NULL,
+	email VARCHAR(100) NOT NULL, 
+	state VARCHAR(100) NOT NULL, 
+	city VARCHAR(150) NOT NULL,
+	street_address VARCHAR(200) NOT NULL,
+	plan VARCHAR(100) NOT NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (plan) REFERENCES Rental_Plan(plan_name)
+);
+
+-- imdb database, not quite sure how to reference other databases, so everything is in here.
+CREATE TABLE ACTOR (id INT PRIMARY KEY, fname VARCHAR(50), lname VARCHAR(50), gender VARCHAR(1));
+CREATE TABLE MOVIE(id INT PRIMARY KEY, name VARCHAR(200), year INT);
+CREATE TABLE DIRECTORS(id INT PRIMARY KEY, fname VARCHAR(50), lname VARCHAR(50));
+CREATE TABLE CASTS(pid INT, mid INT, role VARCHAR(100));
+CREATE TABLE MOVIE_DIRECTORS(did INT, mid INT);
+CREATE TABLE GENRE(mid INT, genre VARCHAR(50));
+
+alter table casts add constraint fk_casts_actor foreign key (pid) references actor (id);
+alter table casts add constraint fk_casts_movie foreign key (mid) references movie (id);
+alter table movie_directors add constraint fk_movie_directors_directors foreign key (did) references directors (id);
+alter table movie_directors add constraint fk_movie_directors_movie foreign key (mid) references movie (id);
+
+CREATE TABLE Rental (
+	rental_id int,
+	date_out date NOT NULL,
+	date_in date,
+	mid int,
+	cid int,
+	PRIMARY KEY (rental_id),
+	FOREIGN KEY (mid) REFERENCES Movie(id),
+	FOREIGN KEY (cid) REFERENCES Customer(id)
+);
+
+-- for copying in the movie database, replace these paths with the locations of your respective txt files
+-- set client_encoding to 'latin1';
+-- \copy actor from 'C:/Users/Andrew Leung/Documents/2017-2018/Spring/Database Design/imdb2015/actor.txt' with delimiter '|' null as ''
+-- \copy movie from 'C:/Users/Andrew Leung/Documents/2017-2018/Spring/Database Design/imdb2015/movie.txt' with delimiter '|' null as ''
+-- \copy directors from 'C:/Users/Andrew Leung/Documents/2017-2018/Spring/Database Design/imdb2015/directors.txt' with delimiter '|' null as ''
+-- \copy casts from 'C:/Users/Andrew Leung/Documents/2017-2018/Spring/Database Design/imdb2015/casts.txt' with delimiter '|' null as ''
+-- \copy movie_directors from 'C:/Users/Andrew Leung/Documents/2017-2018/Spring/Database Design/imdb2015/movie_directors.txt' with delimiter '|' null as ''
+-- \copy genre from 'C:/Users/Andrew Leung/Documents/2017-2018/Spring/Database Design/imdb2015/genre.txt' with delimiter '|' null as ''
+
+-- RENTAL PLANS
+INSERT INTO Rental_Plan VALUES ('Basic', 10, 3);
+INSERT INTO Rental_Plan VALUES ('Premium', 15, 5);
+INSERT INTO Rental_Plan VALUES ('Employee', 0, 9999);
+
+-- CUSTOMER EXAMPLES (probably need some more examples)
+INSERT INTO Customer VALUES (1, 'leung.an', 'nuid', 'Andrew', 'Leung', 'leung.an@husky.neu.edu', 'MA', 'Boston', '90 The Fenway', 'Basic');
