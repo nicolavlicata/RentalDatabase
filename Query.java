@@ -51,10 +51,7 @@ public class Query {
     private String _setplan_sql = "UPDATE CUSTOMERS SET pid = ? WHERE cid = ?";
     private PreparedStatement _setplan_statement;
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD");
-    private Date date = new Date();
-    private String _return_movie_sql = "BEGIN TRANSACTION UPDATE MovieRentals "
-      + "SET date_in = " + dateFormat.format(date) + " WHERE cid = ? and mid = ? COMMIT OR ROLLBACK";
+    private String _return_movie_sql = "UPDATE RENTAL SET date_in = current_date WHERE cid = ? and mid = ?";
     private PreparedStatement _return_movie_statement;
 
      private String _casts_actor_mid_sql = "SELECT x.role, y.* " 
@@ -161,6 +158,7 @@ public class Query {
         _plan_statement = _customer_db.prepareStatement(_plan_sql);
         _planall_statement = _customer_db.prepareStatement(_planall_sql);
         _setplan_statement = _customer_db.prepareStatement(_setplan_sql);
+        _return_movie_statement = _customer_db.prepareStatement(_return_movie_sql);
 
         _casts_actor_mid_statement = _imdb.prepareStatement(_casts_actor_mid_sql);
         _rental_mid_statement = _imdb.prepareStatement(_rental_mid_sql);
@@ -425,7 +423,7 @@ public class Query {
     _return_movie_statement.clearParameters();
     _return_movie_statement.setInt(1, cid);
     _return_movie_statement.setInt(2, mid);
-    _return_movie_statement.execute();
+    _return_movie_statement.executeUpdate();
       
   }
 
