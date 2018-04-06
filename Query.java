@@ -31,6 +31,9 @@ public class Query {
     private String _search_sql = "SELECT * FROM movie WHERE name like ? ORDER BY id";
     private PreparedStatement _search_statement;
 
+    private String _id_search_sql = "SELECT * FROM movie WHERE id = ?";
+    private PreparedStatement _id_search_statement;
+
     private String _director_mid_sql = "SELECT y.* "
                      + "FROM movie_directors x, directors y "
                      + "WHERE x.mid = ? and x.did = y.id";
@@ -78,15 +81,13 @@ public class Query {
       + "ORDER BY movies.id ";
   private PreparedStatement _fs_actors_statement;
   
-  private String _movies_rented_sql = "SELECT x.*"
-      + "FROM movie x, rental y "
-      + "WHERE y.cid = ? AND y.mid = x.id AND y.date_in IS NULL";
+  private String _movies_rented_sql = "SELECT x.* FROM MOVIE x, rental y WHERE y.cid = ? AND y.mid = x.id AND y.date_in IS NULL";
   private PreparedStatement _movies_rented_statement;
 
   private String _customer_rentsleft_sql = "WITH movies_rented AS (" + _movies_rented_sql + ")"
       + "SELECT y.max_rentals - COUNT(movies_rented.*) "
-      + "FROM Customer x, Rental_Plan y, cr "
-      + "WHERE x.id = ? AND y.plan_name = x.plan ";
+      + "FROM Customers x, Rental_Plan y, cr "
+      + "WHERE x.cid = ? AND y.pid = x.pid ";
   private PreparedStatement _customer_rentsleft_statement;
 
   private String _customer_name_sql = "SELECT fname, lname "
@@ -159,6 +160,7 @@ public class Query {
         _planall_statement = _customer_db.prepareStatement(_planall_sql);
         _setplan_statement = _customer_db.prepareStatement(_setplan_sql);
         _return_movie_statement = _customer_db.prepareStatement(_return_movie_sql);
+        _id_search_statement = _imdb.prepareStatement(_id_search_sql);
 
         _casts_actor_mid_statement = _imdb.prepareStatement(_casts_actor_mid_sql);
         _rental_mid_statement = _imdb.prepareStatement(_rental_mid_sql);
@@ -234,12 +236,26 @@ public class Query {
 
     public boolean helper_check_movie(int mid) throws Exception {
         /* is mid a valid movie id ? you have to figure out  */
-        return true;
+        _id_search_statement.clearParameters();
+        _id_search_statement.setInt(1, mid);
+        ResultSet _id_search_set = _id_search_statement.executeQuery();
+        while (_id_search_set.next()) {
+          return true;
+        }
+        return false;
     }
 
     private int helper_who_has_this_movie(int mid) throws Exception {
         /* find the customer id (cid) of whoever currently rents the movie mid; return -1 if none */
-        return (77);
+        _rental_mid_statement.clearParameters();
+        _rental_mid_statement.setInt(1, mid);
+        ResultSet rental_set = _rental_mid_statement.executeQuery();
+        while (rental_set.next()) {
+          rental_set.close();
+          return rental_set.getInt(1);
+        }
+        rental_set.close();
+        return -1;
     }
 
     /**********************************************************/
@@ -347,6 +363,15 @@ public class Query {
     
     public void transaction_list_user_rentals(int cid) throws Exception {
         /* println all movies rented by the current user*/
+        _movies_rented_statement.clearParameters();
+        _movies_rented_statement.setInt(1, cid);
+        ResultSet _movies_rented_set = _movies_rented_statement.executeQuery();
+        System.out.println("YOUR RENTED MOVIES:");
+        while (_movies_rented_set.next()) {
+          System.out.println("\t\tMOVIE NAME:" + _movies_rented_set.getString(2) + " | YEAR: " 
+              + _movies_rented_set.getInt(3));
+        }
+        System.out.println();
     }
 
     public void transaction_rent(int cid, int mid) throws Exception {
