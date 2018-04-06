@@ -36,7 +36,7 @@ public class Query {
                      + "WHERE x.mid = ? and x.did = y.id";
     private PreparedStatement _director_mid_statement;
 
-    private String _count_rentals_sql = "SELECT count(mid) FROM rental where cid = ? and date_in = null";
+    private String _count_rentals_sql = "SELECT count(mid) FROM rental where cid = ? and date_in is null";
     private PreparedStatement _count_rentals_statement;
 
     private String _customer_sql = "SELECT * FROM CUSTOMERS WHERE cid = ?" ;
