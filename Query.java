@@ -163,13 +163,13 @@ public class Query {
         _id_search_statement = _imdb.prepareStatement(_id_search_sql);
 
         _casts_actor_mid_statement = _imdb.prepareStatement(_casts_actor_mid_sql);
-        _rental_mid_statement = _imdb.prepareStatement(_rental_mid_sql);
+        _rental_mid_statement = _customer_db.prepareStatement(_rental_mid_sql);
         _fs_directors_statement = _imdb.prepareStatement(_fs_directors_sql);
         _fs_actors_statement = _imdb.prepareStatement(_fs_actors_sql);
-        _customer_rentsleft_statement = _imdb.prepareStatement(_customer_rentsleft_sql);
-        _customer_name_statement = _imdb.prepareStatement(_customer_name_sql);
-        _movies_rented_statement = _imdb.prepareStatement(_movies_rented_sql);
-        _plans_statement = _imdb.prepareStatement(_plans_sql);
+        _customer_rentsleft_statement = _customer_db.prepareStatement(_customer_rentsleft_sql);
+        _customer_name_statement = _customer_db.prepareStatement(_customer_name_sql);
+        _movies_rented_statement = _customer_db.prepareStatement(_movies_rented_sql);
+        _plans_statement = _customer_db.prepareStatement(_plans_sql);
 
 
         _customer_login_statement = _customer_db.prepareStatement(_customer_login_sql);
