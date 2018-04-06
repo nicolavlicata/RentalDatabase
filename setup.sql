@@ -27,7 +27,7 @@ CREATE TABLE Customers (
 
 CREATE TABLE Rental (
 	rid int PRIMARY KEY,
-	mid int,
+	mid int REFERENCES Movie(id),
 	cid integer REFERENCES Customers(cid),
 	date_out date,
 	date_in date
